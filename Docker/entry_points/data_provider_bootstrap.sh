@@ -22,7 +22,8 @@ fi
 
 groupmod -g ${GROUPID} cbrain || die "groupmod -g ${GROUPID} cbrain failed"
 usermod -u ${USERID} cbrain  || die "usermod -u ${USERID} cbrain" # the files in /home/cbrain are updated automatically
-for volume in /home/cbrain/data
+for volume in /home/cbrain/data \
+         /home/cbrain/.ssh
 do
     echo "chowning ${volume}"
     chown cbrain:cbrain ${volume}

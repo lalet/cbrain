@@ -10,7 +10,6 @@ services:
      - "${PORT}:3000"
     depends_on:
      - mysql
-     - cbrain-bourreau
     environment:
       MODE: ${MODE}
       USERID: ${USERID}
@@ -32,10 +31,13 @@ services:
     image: mcin/cbrain_bourreau:dev
     volumes:
      - ./volumes/portal/.ssh:/home/cbrain/.portal_ssh
-     - ./volumes/bourreau/.ssh:/home/cbrain/.ssh
      - ./volumes/bourreau/data_cache:/home/cbrain/cbrain_data_cache
      - ./volumes/bourreau/plugins:/home/cbrain/plugins
      - ./volumes/bourreau/cbrain_task_directories:/home/cbrain/cbrain_task_directories
+    ports:
+     - "${BOURREAU_SSH_PORT}:22"
+    depends_on:
+     - cbrain-portal
     environment:
       USERID: ${USERID}
       GROUPID: ${GROUPID}
@@ -46,6 +48,10 @@ services:
     volumes:
      - ./volumes/portal/.ssh:/home/cbrain/.portal_ssh
      - ./volumes/data_provider/data:/home/cbrain/data
+    ports:
+     - "${PROVIDER_SSH_PORT}:22"
+    depends_on:
+     - cbrain-portal
     environment:
       USERID: ${USERID}
       GROUPID: ${GROUPID}

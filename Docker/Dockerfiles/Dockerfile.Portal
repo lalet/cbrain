@@ -24,7 +24,14 @@ RUN source ~/.bashrc && \
 # CBRAIN code copy #
 ####################
 
-COPY . /home/cbrain/cbrain/
+COPY *.txt *.md *.sh *.csv /home/cbrain/cbrain/
+COPY BrainPortal/ /home/cbrain/cbrain/BrainPortal/
+COPY Docker/entry_points/portal_bootstrap.sh \
+     Docker/entry_points/portal.sh \
+     Docker/entry_points/functions.sh /home/cbrain/cbrain/Docker/entry_points/
+COPY Docker/init_portal/ /home/cbrain/cbrain/Docker/init_portal/
+COPY Docker/templates/ /home/cbrain/cbrain/Docker/templates/
+
 USER root
 RUN chown cbrain:cbrain -R /home/cbrain/cbrain
 
@@ -54,7 +61,7 @@ CMD []
 #                     the Bourreaux and data providers.
 #
 # /home/cbrain/data_provider: a local data provider.
- 
+
 VOLUME /home/cbrain/cbrain_data_cache \
        /home/cbrain/.ssh  \
        /home/cbrain/plugins \

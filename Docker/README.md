@@ -11,6 +11,9 @@ cd Docker
 source .env
 USERID=`id -u` GROUPID=`id -g` docker-compose up
 ```
+
+You can change the ports in .env if you wish.
+
 Be careful to write down the CBRAIN admin password the first time you run `docker-compose up`.
 
 The CBRAIN portal is then available at http://localhost:3000. It has a data provider, a bourreau, and the Diagnostics tool configured.

@@ -11,9 +11,5 @@ dockerize -wait tcp://${PORTAL_HOST}:${PORTAL_PORT} -timeout 120s || die "Cannot
 # Automatic exchange of SSH keys
 test -f /home/cbrain/.portal_ssh/id_cbrain_portal.pub || die "Cannot find portal public key in /home/cbrain/.portal_ssh/id_cbrain_portal.pub"
 
-mkdir -p ${HOME}/.ssh
-chmod 700 ${HOME}/.ssh
 cat /home/cbrain/.portal_ssh/id_cbrain_portal.pub >> /home/cbrain/.ssh/authorized_keys
 chmod 600 /home/cbrain/.ssh/authorized_keys
-
-
