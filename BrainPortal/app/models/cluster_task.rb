@@ -1951,12 +1951,6 @@ exit $status
       return
     end
 
-    data_provider_id = self.results_data_provider_id || user.meta[:pref_data_provider_id]
-    if data_provider_id.blank?
-      self.addlog("Cannot save work directory: the task should have a result Data Provider or user should have a default Data Provider")
-      return
-    end
-
     if self.workdir_archived
       self.addlog "Cannot save work directory: this task is archived"
       return
@@ -1964,6 +1958,12 @@ exit $status
 
     if self.share_wd_tid
       self.addlog "Cannot save work directory: this task doesn't have its own work directory"
+      return
+    end
+
+    data_provider_id = self.results_data_provider_id || user.meta[:pref_data_provider_id]
+    if data_provider_id.blank?
+      self.addlog("Cannot save work directory: the task should have a result Data Provider or user should have a default Data Provider")
       return
     end
 
@@ -1990,7 +1990,7 @@ exit $status
       Message.send_message(user,
         :header        => "Could not save work directory",
         :description   => "Unable to save work directory for [[#{self.pretty_type}][/tasks/#{self.id}]]",
-        :variable_text => "#{self.errors.full_messages}",
+        :variable_text => "#{file_collection.errors.full_messages.join("\n")}",
         :type          => :error,
       ) if user
       self.addlog("Could not save work directory.")
