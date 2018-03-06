@@ -1969,7 +1969,7 @@ exit $status
 
     # Save under a new TaskRawWorkdir
     userfile_name   = "TaskRawWorkdir-#{self.tname_run_id}"
-    file_collection = safe_userfile_find_or_new(FileCollection,
+    file_collection = safe_userfile_find_or_new(TaskRawWorkdir,
         :name             => userfile_name,
         :data_provider_id => data_provider_id,
         :user_id          => user.id,
