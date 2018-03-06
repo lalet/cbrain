@@ -1938,9 +1938,9 @@ exit $status
   # Save the directory created to run the job.
   # The directory will be saved as a FileCollection
   # only if the task have a results Data Provider.
-  def save_cluster_workdir(user_id=nil)
-    full_cluster_workdir = self.full_cluster_workdir
-    user                 = User.find(user_id) rescue nil
+  def save_cluster_workdir(user_id)
+    full_cluster_workdir = self.full_cluster_workdir 
+    user                 = User.find(user_id)
 
     # Some verification before saving the work directory
     cb_error "Tried to save a task's work directory while in the wrong Rails app." unless
@@ -1951,7 +1951,7 @@ exit $status
       return
     end
 
-    data_provider_id = self.results_data_provider_id || (user && user.meta[:pref_data_provider_id])
+    data_provider_id = self.results_data_provider_id || user.meta[:pref_data_provider_id]
     if data_provider_id.blank?
       self.addlog("Cannot save work directory: the task should have a result Data Provider or user should have a default Data Provider")
       return
@@ -1971,8 +1971,9 @@ exit $status
     userfile_name   = "TaskRawWorkdir-#{self.tname_run_id}"
     file_collection = safe_userfile_find_or_new(TaskRawWorkdir,
         :name             => userfile_name,
-        :data_provider_id => data_provider_id
-        :user_id          => user_id
+        :data_provider_id => data_provider_id,
+        :user_id          => user.id,
+        :group_id         => user.own_group.id
       )
 
     file_collection.cache_copy_from_local_file(full_cluster_workdir)

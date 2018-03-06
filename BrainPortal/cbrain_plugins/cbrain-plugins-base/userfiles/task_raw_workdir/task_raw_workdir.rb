@@ -22,7 +22,7 @@
 
 #This model is meant to represent an arbitrary collection files (which
 #may or may not contain subdirectories) registered as a single entry in
-#the userfiles table.
+#the userfiles table. More specifically used for Task Work Directory.
 class TaskRawWorkdir < FileCollection
 
   Revision_info=CbrainFileRevision[__FILE__] #:nodoc:
