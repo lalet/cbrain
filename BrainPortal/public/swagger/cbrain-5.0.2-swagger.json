@@ -159,7 +159,7 @@
         ],
         "parameters": [
           {
-            "name": "params",
+            "name": "user",
             "in": "body",
             "description": "An object representing a new User and the autenticity token.",
             "schema": {
@@ -170,6 +170,13 @@
                 }
               }
             }
+          },
+          {
+            "name": "no_password_reset_needed",
+            "in": "query",
+            "description": "Do you want to force the user to reset their password upon first login",
+            "type": "integer",
+            "default": 0
           }
         ],
         "responses": {
@@ -211,28 +218,38 @@
           }
         }
       },
-      "put": {
+      "patch": {
         "summary": "Update information about a user",
         "description": "Updates the information about a user\n",
-        "consumes": [
-          "application/x-www-form-urlencoded"
-        ],
         "parameters": [
           {
             "name": "id",
             "in": "path",
-            "description": "ID of the user",
+            "description": "ID of user to update",
             "required": true,
             "type": "integer",
             "default": 0
           },
           {
-            "name": "force_password_reset",
-            "in": "formData",
-            "description": "Force the user to have a password reset",
-            "type": "boolean",
+            "in": "query",
+            "description": "Boolean to force a password change",
             "required": false,
+            "type": "boolean",
             "default": false
+          },
+          {
+            "name": "user",
+            "in": "body",
+            "description": "An object representing any parameter of the user that you would like to alter, only put ones that you would like to change.",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "user": {
+                  "$ref": "#/definitions/User"
+                }
+              }
+            }
           }
         ],
         "tags": [
@@ -246,6 +263,35 @@
             }
           }
         }
+      },
+      "delete": {
+        "summary": "Deletes a CBRAIN user",
+        "description": "Deletes a CBRAIN User from the database\n",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of user to update",
+            "required": true,
+            "type": "integer",
+            "default": 0
+          }
+        ],
+        "tags": [
+          "Users"
+        ],
+        "responses": {
+          "200": {
+            "description": "User successfully deleted"
+          },
+          "401": {
+            "description": "Not authorized to delete this user."
+          },
+          "404": {
+            "description": "User not found with the specified ID"
+          }
+        }
+>>>>>>> ae31c73fd6bb50b69cdff71078975e6b572e16f4
       }
     },
     "/tool_configs": {
@@ -1817,6 +1863,10 @@
         "city": {
           "type": "string",
           "description": "city where the user is located"
+        },
+        "country": {
+          "type": "string",
+          "description": "country where the user is located"
         },
         "time_zone": {
           "type": "string",
