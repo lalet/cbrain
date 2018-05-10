@@ -518,9 +518,6 @@ paths:
           in: formData
           description: An array containing the filenames to register.
           type: array
-          default:
-            - file1
-            - file2
           items:
             type: string
           required: true
@@ -533,9 +530,6 @@ paths:
           items:
             type: string
           required: true
-          default:
-            - SingleFile
-            - SingleFile
         - name: authenticity_token
           in: formData
           type: string
@@ -543,8 +537,30 @@ paths:
           required: true
       responses:
         '200':
-          description: |
-            Files were successfully registered.
+          description: Files were successfully registered.
+          schema: 
+            type: object
+            properties: 
+              notice: 
+                type: string
+              error: 
+                type: string
+              newly_registered_userfiles: 
+                type: array
+                items:
+                  $ref: '#/definitions/Userfile'
+              previously_registered_userfiles: 
+                type: array
+                items:
+                  $ref: '#/definitions/Userfile'
+              userfiles_in_transit: 
+                type: array
+                items:
+                  $ref: '#/definitions/Userfile'
+              num_unregistered: 
+                type: number
+              num_erased:
+                type: number
         '401':
           description: No session created yet.
         '403':
