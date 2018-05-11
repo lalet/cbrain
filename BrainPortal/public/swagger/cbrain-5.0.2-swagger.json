@@ -13,7 +13,7 @@
       "url" : "https://opensource.org/licenses/GPL-3.0"
     }
   },
-  "host" : "localhost:5000",
+  "host" : "localhost:3001",
   "basePath" : "/",
   "schemes" : [ "http" ],
   "consumes" : [ "application/x-www-form-urlencoded", "multipart/form-data" ],
@@ -1413,12 +1413,14 @@
         "tags" : [ "Tasks" ],
         "summary" : "Create a new Task.",
         "description" : "This method allows the creation of a new Task.\n",
+        "consumes" : [ "application/json" ],
         "parameters" : [ {
           "in" : "body",
-          "name" : "Parameters",
-          "required" : true,
+          "name" : "cbrain_task",
+          "description" : "The task to create.",
+          "required" : false,
           "schema" : {
-            "$ref" : "#/definitions/Parameters"
+            "$ref" : "#/definitions/cbrain_task"
           }
         } ],
         "responses" : {
@@ -2407,22 +2409,17 @@
         "notice" : "notice"
       }
     },
-    "Parameters" : {
+    "cbrain_task" : {
       "type" : "object",
-      "required" : [ "authenticity_token", "params" ],
+      "required" : [ "cbrain_task", "tool_id" ],
       "properties" : {
-        "authenticity_token" : {
-          "type" : "string",
-          "description" : "The token returned by /session/new"
+        "tool_id" : {
+          "type" : "integer"
         },
-        "params" : {
+        "cbrain_task" : {
           "type" : "object",
           "properties" : { }
         }
-      },
-      "example" : {
-        "params" : "{}",
-        "authenticity_token" : "authenticity_token"
       }
     }
   }
