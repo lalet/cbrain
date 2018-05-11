@@ -12,7 +12,7 @@ info:
   contact:
     name: CBRAIN Development Team
     url: https://github.com/aces/cbrain
-host: 'localhost:5000'
+host: 'localhost:3001'
 securityDefinitions:
   BrainPortalSession:
     type: apiKey
@@ -1293,20 +1293,21 @@ paths:
         This method allows the creation of a new Task.
       tags:
         - Tasks
+      consumes:
+        - application/json
       parameters:
-        - name: Parameters
-          in: body
-          required: true
+        - in: body
+          name: cbrain_task
+          description: The task to create.
           schema:
             type: object
             required:
-              - params
-              - authenticity_token
+              - tool_id
+              - cbrain_task
             properties:
-              authenticity_token:
-                type: string
-                description: The token returned by /session/new
-              params:
+              tool_id:
+                type: integer
+              cbrain_task:
                 type: object
       responses:
         '200':
