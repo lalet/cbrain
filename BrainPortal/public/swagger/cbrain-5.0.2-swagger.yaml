@@ -12,7 +12,7 @@ info:
   contact:
     name: CBRAIN Development Team
     url: https://github.com/aces/cbrain
-host: 'localhost:5000'
+host: 'localhost:3001'
 securityDefinitions:
   BrainPortalSession:
     type: apiKey
@@ -1284,7 +1284,7 @@ paths:
           schema:
             type: array
             items:
-              $ref: '#/definitions/CbrainTask'
+              $ref: '#/definitions/Task'
         '401':
           description: No Session created yet.
     post:
@@ -1293,24 +1293,29 @@ paths:
         This method allows the creation of a new Task.
       tags:
         - Tasks
+      consumes:
+        - application/json
       parameters:
-        - name: Parameters
-          in: body
-          required: true
+        - in: body
+          name: cbrain_task
+          description: The task to create.
           schema:
             type: object
             required:
-              - params
-              - authenticity_token
+              - tool_id
+              - cbrain_task
             properties:
-              authenticity_token:
-                type: string
-                description: The token returned by /session/new
-              params:
+              tool_id:
+                type: integer
+              cbrain_task:
                 type: object
       responses:
         '200':
           description: Task created successfully.
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Task'
         '401':
           description: No Session created yet.
   '/tasks/{id}':
@@ -1331,6 +1336,8 @@ paths:
       responses:
         '200':
           description: Information about a Task.
+          schema:
+            $ref: '#/definitions/Task'
         '401':
           description: No Session created yet.
     put:
@@ -1727,6 +1734,9 @@ definitions:
         type: integer
         format: int64
         description: Unique identifier for the Task.
+      type: 
+        type: string
+        description: The task type
       batch_id:
         type: integer
         format: int64
@@ -1802,6 +1812,110 @@ definitions:
         description: >-
           ID of the Data Provider that contains the Userfile that represents the
           results of the task.
+      cluster_workdir_size:
+        type: integer
+        description: size of workdirectory
+      workdir_archived:
+        type: string
+        format: boolean
+        description: >-
+          Boolean variable that indicates whether the working directory of the
+          task is available on the processing server or has been archived and is
+          no longer accessible.
+      workdir_archive_userfile_id:
+        type: number
+        format: int64
+        description: >-
+          ID of the userfile created as part of the archival process, if the
+          task's working directory has been archived.
+  Task:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int64
+        description: Unique identifier for the Task.
+      type: 
+        type: string
+        description: The task type
+      batch_id:
+        type: integer
+        format: int64
+        description: >-
+          ID of the batch this task was launched as part of. Batches of tasks
+          consist of the same task, with the same parameters, being run on many
+          different input files.
+      cluster_jobid:
+        type: string
+        description: ID of the task on the cluster associated with this task.
+      cluster_workdir:
+        type: string
+        description: Path on the cluster to the working directory.
+      params:
+        type: object
+        description: >-
+          Parameters used as inputs to the scientific calculation associated
+          with the task.
+      status:
+        type: string
+        description: Current status of the task.
+      created_at:
+        type: string
+        format: dateTime
+        description: Date created.
+      updated_at:
+        type: string
+        format: dateTime
+        description: Last updated.
+      user_id:
+        type: number
+        format: int64
+        description: ID of the User who created the Task.
+      bourreau_id:
+        type: number
+        format: int64
+        description: ID of the Bourreau the Task was launched on.
+      description:
+        description: Description of the Task.
+      prerequisites:
+        type: string
+        description: List of prerequisites.
+      share_wd_tid:
+        type: number
+        format: int64
+        description: share_wd_tid
+      run_number:
+        type: number
+        format: int64
+        description: The number of attempts that it has taken to run the task.
+      group_id:
+        type: number
+        format: int64
+        description: ID of the group that this task is being run in.
+      tool_config_id:
+        type: number
+        format: int64
+        description: >-
+          ID number that specifies which Tool Config to use. The Tool Config
+          specifies environment variables and other system-specific scripts
+          necessary for the Task to be run in the target environment.
+      level:
+        type: number
+        format: int64
+        description: level
+      rank:
+        type: number
+        format: int64
+        description: rank
+      results_data_provider_id:
+        type: number
+        format: int64
+        description: >-
+          ID of the Data Provider that contains the Userfile that represents the
+          results of the task.
+      cluster_workdir_size:
+        type: integer
+        description: size of workdirectory
       workdir_archived:
         type: string
         format: boolean
