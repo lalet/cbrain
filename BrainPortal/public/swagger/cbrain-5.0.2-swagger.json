@@ -1400,7 +1400,7 @@
             "schema" : {
               "type" : "array",
               "items" : {
-                "$ref" : "#/definitions/CbrainTask"
+                "$ref" : "#/definitions/Task"
               }
             }
           },
@@ -1425,7 +1425,13 @@
         } ],
         "responses" : {
           "200" : {
-            "description" : "Task created successfully."
+            "description" : "Task created successfully.",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/Task"
+              }
+            }
           },
           "401" : {
             "description" : "No Session created yet."
@@ -1448,7 +1454,10 @@
         } ],
         "responses" : {
           "200" : {
-            "description" : "Information about a Task."
+            "description" : "Information about a Task.",
+            "schema" : {
+              "$ref" : "#/definitions/Task"
+            }
           },
           "401" : {
             "description" : "No Session created yet."
@@ -1991,6 +2000,10 @@
           "format" : "int64",
           "description" : "Unique identifier for the Task."
         },
+        "type" : {
+          "type" : "string",
+          "description" : "The task type"
+        },
         "batch_id" : {
           "type" : "integer",
           "format" : "int64",
@@ -2071,6 +2084,119 @@
           "format" : "int64",
           "description" : "ID of the Data Provider that contains the Userfile that represents the results of the task."
         },
+        "cluster_workdir_size" : {
+          "type" : "integer",
+          "description" : "size of workdirectory"
+        },
+        "workdir_archived" : {
+          "type" : "string",
+          "format" : "boolean",
+          "description" : "Boolean variable that indicates whether the working directory of the task is available on the processing server or has been archived and is no longer accessible."
+        },
+        "workdir_archive_userfile_id" : {
+          "type" : "number",
+          "format" : "int64",
+          "description" : "ID of the userfile created as part of the archival process, if the task's working directory has been archived."
+        }
+      }
+    },
+    "Task" : {
+      "type" : "object",
+      "properties" : {
+        "id" : {
+          "type" : "integer",
+          "format" : "int64",
+          "description" : "Unique identifier for the Task."
+        },
+        "type" : {
+          "type" : "string",
+          "description" : "The task type"
+        },
+        "batch_id" : {
+          "type" : "integer",
+          "format" : "int64",
+          "description" : "ID of the batch this task was launched as part of. Batches of tasks consist of the same task, with the same parameters, being run on many different input files."
+        },
+        "cluster_jobid" : {
+          "type" : "string",
+          "description" : "ID of the task on the cluster associated with this task."
+        },
+        "cluster_workdir" : {
+          "type" : "string",
+          "description" : "Path on the cluster to the working directory."
+        },
+        "params" : {
+          "type" : "object",
+          "description" : "Parameters used as inputs to the scientific calculation associated with the task.",
+          "properties" : { }
+        },
+        "status" : {
+          "type" : "string",
+          "description" : "Current status of the task."
+        },
+        "created_at" : {
+          "type" : "string",
+          "format" : "dateTime",
+          "description" : "Date created."
+        },
+        "updated_at" : {
+          "type" : "string",
+          "format" : "dateTime",
+          "description" : "Last updated."
+        },
+        "user_id" : {
+          "type" : "number",
+          "format" : "int64",
+          "description" : "ID of the User who created the Task."
+        },
+        "bourreau_id" : {
+          "type" : "number",
+          "format" : "int64",
+          "description" : "ID of the Bourreau the Task was launched on."
+        },
+        "prerequisites" : {
+          "type" : "string",
+          "description" : "List of prerequisites."
+        },
+        "share_wd_tid" : {
+          "type" : "number",
+          "format" : "int64",
+          "description" : "share_wd_tid"
+        },
+        "run_number" : {
+          "type" : "number",
+          "format" : "int64",
+          "description" : "The number of attempts that it has taken to run the task."
+        },
+        "group_id" : {
+          "type" : "number",
+          "format" : "int64",
+          "description" : "ID of the group that this task is being run in."
+        },
+        "tool_config_id" : {
+          "type" : "number",
+          "format" : "int64",
+          "description" : "ID number that specifies which Tool Config to use. The Tool Config specifies environment variables and other system-specific scripts necessary for the Task to be run in the target environment."
+        },
+        "level" : {
+          "type" : "number",
+          "format" : "int64",
+          "description" : "level"
+        },
+        "rank" : {
+          "type" : "number",
+          "format" : "int64",
+          "description" : "rank"
+        },
+        "results_data_provider_id" : {
+          "type" : "number",
+          "format" : "int64",
+          "description" : "ID of the Data Provider that contains the Userfile that represents the results of the task."
+        },
+        "cluster_workdir_size" : {
+          "type" : "integer",
+          "description" : "size of workdirectory"
+        },
         "workdir_archived" : {
           "type" : "string",
           "format" : "boolean",
@@ -2085,10 +2211,12 @@
       "example" : {
         "batch_id" : 6,
         "level" : 3.61607674925191080461672754609026014804840087890625,
-        "workdir_archive_userfile_id" : 7.3862819483858839220147274318151175975799560546875,
+        "workdir_archive_userfile_id" : 1.231513536777255612975068288506008684635162353515625,
         "created_at" : "created_at",
-        "params" : "params",
+        "type" : "type",
+        "params" : "{}",
         "tool_config_id" : 9.301444243932575517419536481611430644989013671875,
+        "cluster_workdir_size" : 7,
         "prerequisites" : "prerequisites",
         "cluster_workdir" : "cluster_workdir",
         "workdir_archived" : "workdir_archived",
