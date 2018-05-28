@@ -466,14 +466,14 @@ class CbrainTask::<%= name %> < <%= (descriptor['custom'] || {})['cbrain:inherit
         userfile_class ||= ( File.directory?(path) ? FileCollection : SingleFile )
 
         # If the file already exists, add a tag (task id + ns time) to the name
-        if userfile_exists(userfile_class, :name => name)
-          tag = '-' + (self.id.to_s || 'unk') + '-' + (9.times.map { rand(10) }.join)
+        # if userfile_exists(userfile_class, :name => name)
+          tag = self.run_id
           newName = name + tag if name.rindex(".").nil?
           ext = File.extname( name )
           newName ||= name.gsub( /#{ext}\z/, "#{tag + ext}" )
-          self.addlog("File with same name found. Renaming to #{newName} before saving.")
+        #  self.addlog("File with same name found. Renaming to #{newName} before saving.")
           name = newName
-        end
+        # end
 
         # Save the file (possible overwrite if race condition)
         output = safe_userfile_find_or_new(userfile_class, :name => name)
