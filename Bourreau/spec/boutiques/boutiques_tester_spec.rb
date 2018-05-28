@@ -68,6 +68,7 @@ describe "Bourreau Boutiques Tests" do
       # Assign it a bourreau
       resource = RemoteResource.current_resource
       @task.bourreau_id = resource.id
+      @task.run_id      = "1-2"
       # Give access to the generated task class itself
       @task_const    = "CbrainTask::#{SchemaTaskGenerator.classify(@task.name)}".constantize
     end
@@ -424,7 +425,7 @@ describe "Bourreau Boutiques Tests" do
       # Check that save_results works as expected for existent files
       it "can save results files" do
         # Make sure the file on the filesystem exists
-        expect( File.exists? @fname_base ).to be true
+        expect( File.exists? "#{@fname_base}-#{@task.run_id}" ).to be true
         # Ensure the file has not been registered/created yet
         expect( @task.userfile_exists(@userfileClass, @reqOutfileProps) ).to be false
         # Ensure that saving the results occurs error-free
