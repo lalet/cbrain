@@ -334,6 +334,7 @@ class CbrainTask::<%= name %> < <%= (descriptor['custom'] || {})['cbrain:inherit
     end
 %   end # if containerImage (i.e. output filepath changes for containerized tasks)
 %   end
+# XXX cbrain specific field should stay 
 %   if (descriptor['custom'] || {})['cbrain:ignore-exit-status']
     # Generate the final command-line to run <%= name %>
     envVars + [ apply_template(<<-'CMD', keys<%= flags.empty? ? '' : ', flags: flags' %><%= seps.empty? ? '' : ', separators: seps' %>) ] + outfileMoveCommands
@@ -341,6 +342,19 @@ class CbrainTask::<%= name %> < <%= (descriptor['custom'] || {})['cbrain:inherit
     CMD
 %   else
     # Generate the final command-line to run <%= name %>
+# XXX Invocation == cle/valeur des parametres.. 
+# Should create the invocation file from the input
+# {
+#    "dti_file": "/tmp/test.nii.gz",
+#    "atlas": "/ndmg_atlases/atlas/MNI152_T1_1mm.nii.gz",
+#    "bval_file": "/tmp/bval.txt",
+#    "bvec_file": "/tmp/bvec.txt",
+#    "mask": "/ndmg_atlases/atlas/MNI152_T1_1mm_brain_mask.nii.gz",
+#    "mprage_file": "/tmp/mprage.nii.gz",
+#    "outdir": "/tmp",
+#    "cpac200": "/ndmg_atlases/labels/CPAC200.nii.gz"
+#}
+# XXX bosh exec launch -x (debug) descripteur + invocation dans un fichier json. 
     command = apply_template(<<-'CMD', keys<%= flags.empty? ? '' : ', flags: flags' %><%= seps.empty? ? '' : ', separators: seps' %>)
       <%= descriptor['command-line'] %>
     CMD
