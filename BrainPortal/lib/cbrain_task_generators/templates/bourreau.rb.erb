@@ -355,6 +355,55 @@ class CbrainTask::<%= name %> < <%= (descriptor['custom'] || {})['cbrain:inherit
 #    "cpac200": "/ndmg_atlases/labels/CPAC200.nii.gz"
 #}
 # XXX bosh exec launch -x (debug) descripteur + invocation dans un fichier json. 
+#
+# And mount the following
+#
+#  For Singularity
+# 
+# # Invoke Singularity with our wrapper script above.
+# Tricks used here:
+# 1) we mount the gridshare root directory
+# 2) we mount the local data provider cache root directory
+# 3) we mount each (if any) of the root directory for local data providers
+# 4) with -H we mount the task's work directory as the $HOME directory
+#{singularity_executable_name}                  \\
+#    exec                                        \\
+#    -B #{gridshare_dir.bash_escape}             \\
+#    -B #{cache_dir.bash_escape}                 \\
+#    #{esc_local_dp_mountpoints}                 \\
+#    -H #{task_workdir.bash_escape}              \\
+#    #{container_image_name.bash_escape}         \\
+#   # ./#{singularity_wrapper_basename.bash_escape}
+#
+# For docker
+# #{docker_executable_name}                        \\
+#    run                                          \\
+#    -u #{Process.uid}:#{Process.gid}             \\
+#    --rm                                         \\
+#    --entrypoint /bin/sh                         \\
+#    -v "${PWD}":#{esc_cont_work_dir}             \\
+#    -v #{cache_dir.bash_escape}:#{cache_dir.bash_escape}         \\
+#    -v #{gridshare_dir.bash_escape}:#{gridshare_dir.bash_escape} \\
+#    #{esc_local_dp_mountpoints}                  \\
+#    -w #{esc_cont_work_dir}                      \\
+#    "$docker_image_name"                         \\
+#    "${PWD}"/#{docker_wrapper_basename.bash_escape}
+#
+# For both
+# --> PWD == taskworkdir ?
+# --> cache_dir 
+# --> gridshare_dir
+# --> all the local_dp_mountpoints
+#
+# bosh exec launch 
+# 
+#  -v [VOLUMES [VOLUMES ...]], --volumes [VOLUMES [VOLUMES ...]]
+#                        Volumes to mount when launching the container. Format
+#                        consistently the following: /a:/b will mount local
+#                        direcotry /a to container directory /b.
+#
+#
+#
     command = apply_template(<<-'CMD', keys<%= flags.empty? ? '' : ', flags: flags' %><%= seps.empty? ? '' : ', separators: seps' %>)
       <%= descriptor['command-line'] %>
     CMD
